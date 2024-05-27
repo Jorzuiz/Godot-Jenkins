@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://uidicgaojgdi"
 path.s3tc="res://.godot/imported/crosshair046.png-adf558f9d87ef20104f2ce22346ed1b7.s3tc.ctex"
+path.etc2="res://.godot/imported/crosshair046.png-adf558f9d87ef20104f2ce22346ed1b7.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Player_Controller/HUD ASSETS/crosshair046.png"
-dest_files=["res://.godot/imported/crosshair046.png-adf558f9d87ef20104f2ce22346ed1b7.s3tc.ctex"]
+dest_files=["res://.godot/imported/crosshair046.png-adf558f9d87ef20104f2ce22346ed1b7.s3tc.ctex", "res://.godot/imported/crosshair046.png-adf558f9d87ef20104f2ce22346ed1b7.etc2.ctex"]
 
 [params]
 
