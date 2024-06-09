@@ -50,7 +50,8 @@ Abandono Docker para esto, va a correr todo desde la maquina destino
 Seteamos una variable global EN JENKINS con la ruta del exe.
 
 El archivo cfg que se usa para generar el exe/apk contiene ciertas credenciales asique se suele añadir al gitignore, hay que encontrar una manera de configurarlas desde consola I guess.
-Por lo visto esto se solucionó en un [Pull Request](https://github.com/godotengine/godot/pull/76165)
+Por lo visto esto se solucionó en un [Pull Request](https://github.com/godotengine/godot/pull/76165) PERO no está actualizado el gitignore asique se ha usado uno diferente.
+
 
 Jenkins ser puede acceder desde fuera con la "app" en navegador. Hay que configurar los puertos del server primero. en este caso se ha creado 8080 por defecto y para acceder desde otro ordenador usamos <iplocal:8080>
 tenemos que crear en el server un usuario nuevo para poder entrar.
