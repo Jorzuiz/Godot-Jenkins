@@ -56,10 +56,20 @@ Jenkins ser puede acceder desde fuera con la "app" en navegador. Hay que configu
 tenemos que crear en el server un usuario nuevo para poder entrar.
 Una vez dentro tenemos acceso a las pipelines, podemos crear cosas.
 
+La pipeline está configurada de la siguiente manera
+$$\boxed{Deteccion de algo}\rightarrow\boxed{Checkout del código}\rightarrow\boxed{Ejecucion del script de build}$$
+
 ## Justificacion
 
 -Godot: Se ha elegido Godot porque es de código abierto, gratuito y las builds son ligeras. Hay múltiples juegos "grandes" en la industria recientemente publicados con Godot y está cogiendo fuerza.
 
 -Jenkins: Se ha elegido Jenkins porque es una herramienta de código abierto, es de las más extendidas para automatización, lo cual hace quehaya una gran cantidad de plugins que se mantienen y actualizan continuamente y hay tutoriales de ´facil acceso.
+Los 'trabajos' de automatizacion pueden configurarse tanto en la app como en un archivo jenkinsfile. ambas opciones tienen ventajas y desventajas, más seguridad o más facilidad de acceso por los usuarios, etc..
 
 -Servidor Dedicado: Aunque las builds pueden correrse en la nube o incluso en contenedores de Docker se ha decidido hacer así por simplicidad
+
+## Documentacion - Referencias
+
+[Construccion de contenedores de Godot](https://github.com/godotengine/build-containers)
+[Scripts de building en container](https://github.com/godotengine/godot-build-scripts)
+[Implementación de automatización en Gitlab](https://gitlab.com/greenfox/godot-build-automation)
