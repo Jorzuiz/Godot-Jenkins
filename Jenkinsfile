@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/Jorzuiz/Godot-Jenkins.git', credentialsId: 'Github'
+                git url: 'https://github.com/Jorzuiz/Godot-Jenkins.git', credentialsId: 'Github'
             }
         }
         stage('Install Export Templates') {
