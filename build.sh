@@ -11,6 +11,6 @@ fi
 # Crea directorio para la nueva build
 mkdir -p $BUILD_DIR
 
-./Godot_v4.2.2-stable_win64_console.exe --headless --path "First Person Shooter Template" --export-release "Windows Desktop" "../$BUILD_DIR/MyGame.exe"
+./Godot_v4.2.2-stable_win64_console.exe --headless --path "First Person Shooter Template" --export-release "Windows Desktop" "./$BUILD_DIR/MyGame.exe"
 
 echo "Build correct"

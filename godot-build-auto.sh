@@ -426,3 +426,5 @@ then
 fi
 
 main "$@"
+
+read -p "debug"
