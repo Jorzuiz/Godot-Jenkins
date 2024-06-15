@@ -387,3 +387,5 @@ $RECYCLE.BIN/
 
 .\godot
 Godot_v4.2.2-stable_win64.exe
+*.zip
+Godot_v4.2.2-stable_win64_console.exe

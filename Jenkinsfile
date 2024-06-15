@@ -36,5 +36,12 @@ pipeline {
                 '''
             }
         }
+
+        stage('Archive') {
+            steps {
+                echo "Archiving build artifacts..."
+                archiveArtifacts artifacts: 'build/game.exe', fingerprint: true
+            }
+        }
     }
 }
