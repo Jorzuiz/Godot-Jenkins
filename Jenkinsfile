@@ -1,43 +1,39 @@
 pipeline {
     agent any
 
+    environment {
+        GODOT_VERSION = '4.2.2' // Cambia esta versión según sea necesario
+        GODOT_EXECUTABLE = "C:\\path\\to\\Godot_v${GODOT_VERSION}-stable_win64.exe" // Cambia la ruta al ejecutable de Godot
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Jorzuiz/Godot-Jenkins.git', credentialsId: 'Github'
+                echo "Checkout of the repository..."
             }
         }
-        stage('Install Export Templates') {
+        stage('Tests') {
             steps {
-                script {
-                    def godotExportPath = 'C:/Users/ampxr/AppData/Roaming/Godot/export_templates/4.2.2.stable'
-                    def exportTemplatesURL = 'https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_export_templates.tpz'
-                    def exportTemplatesArchive = 'export_templates.tpz'
+                echo "Testing the project..."
+            }
+        }
+        stage('Build') {
+            steps {
+                echo "Building project..."
+                powershell '''
+                    $godot_executable = "${env:GODOT_EXECUTABLE}"
                     
-                    // Download export templates if not present
-                    if (!fileExists("${godotExportPath}/windows_debug_x86_64.exe")) {
-                        sh """
-                            curl -L -o ${exportTemplatesArchive} ${exportTemplatesURL}
-                            mkdir -p ${godotExportPath}
-                            tar -xzf ${exportTemplatesArchive} -C ${godotExportPath}
-                        """
+                    Write-Output "Checking if Godot executable exists at: $godot_executable"
+                    if (Test-Path $godot_executable) {
+                        Write-Output "Godot executable found. Starting build..."
+                        & $godot_executable --export-debug "Windows Desktop" "$pwd\\build\\game.exe"
+                    } else {
+                        Write-Error "Godot executable not found: $godot_executable"
+                        Write-Output "Listing contents of directory:"
+                        Get-ChildItem -Path $godot_executable | Write-Output
+                        exit 1
                     }
-                }
-            }
-        }
-        stage('Prepare Export Directory') {
-            steps {
-                script {
-                    def exportDir = 'C:/path/to/export/directory'  // Ajusta esta ruta según tu configuración
-                    if (!fileExists(exportDir)) {
-                        sh "mkdir -p ${exportDir}"
-                    }
-                }
-            }
-        }
-        stage('Run Shell Script') {
-            steps {
-                sh 'sh ./build.sh'  // Usar Git Bash para ejecutar el script
+                '''
             }
         }
     }
