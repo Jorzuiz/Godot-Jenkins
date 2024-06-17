@@ -2,45 +2,63 @@ pipeline {
     agent any
 
     environment {
-        GODOT_VERSION = '4.2.2' // Cambia esta versión según sea necesario
-        GODOT_EXECUTABLE = "C:\\path\\to\\Godot_v${GODOT_VERSION}-stable_win64.exe" // Cambia la ruta al ejecutable de Godot
+        GODOT_VERSION = '4.2.2' // Change this version as needed
+        GODOT_EXECUTABLE = "path\\to\\Godot_v${GODOT_VERSION}-stable_win64.exe" // Change the path to your Godot executable
+        EXPORT_PRESET = "Windows Desktop" // Change this to your export preset name
+        OUTPUT_PATH = "build\\game.exe" // Change this to your desired output path
+        PROJECT_NAME="FirstPersonShooterTemplate"
+        PROJECT_PATH = "${WORKSPACE}" // Use Jenkins workspace path
+
+        REPOSITORY= 'https://github.com/Jorzuiz/Godot-Jenkins.git'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 echo "Checkout of the repository..."
+                git url: REPOSITORY, branch: 'main'
             }
         }
         stage('Tests') {
             steps {
                 echo "Testing the project..."
+                // Add steps to run your tests, if any
             }
         }
         stage('Build') {
             steps {
                 echo "Building project..."
-                powershell '''
-                    $godot_executable = "${env:GODOT_EXECUTABLE}"
-                    
-                    Write-Output "Checking if Godot executable exists at: $godot_executable"
-                    if (Test-Path $godot_executable) {
-                        Write-Output "Godot executable found. Starting build..."
-                        & $godot_executable --export-debug "Windows Desktop" "$pwd\\build\\game.exe"
-                    } else {
-                        Write-Error "Godot executable not found: $godot_executable"
-                        Write-Output "Listing contents of directory:"
-                        Get-ChildItem -Path $godot_executable | Write-Output
-                        exit 1
-                    }
-                '''
+                script {
+                    def godot_executable = GODOT_EXECUTABLE
+                    def export_preset = EXPORT_PRESET
+                    def output_path = OUTPUT_PATH
+                    def project_path = PROJECT_PATH + "\\" + PROJECT_NAME
+
+                    sh """
+                        echo "Checking if Godot executable exists at: $godot_executable"
+                        if [ -f "$godot_executable" ]; then
+                            echo "Godot executable found. Starting build..."
+                            "$godot_executable" --path "$project_path" --export "$export_preset" "$output_path"
+                            if [ $? -ne 0 ]; then
+                                echo "Build failed with exit code $?"
+                                exit 1
+                            else
+                                echo "Build succeeded."
+                            fi
+                        else
+                            echo "Godot executable not found: $godot_executable"
+                            echo "Listing contents of directory:"
+                            ls -l "$(dirname "$godot_executable")"
+                            exit 1
+                        fi
+                    """
+                }
             }
         }
-
         stage('Archive') {
             steps {
                 echo "Archiving build artifacts..."
-                archiveArtifacts artifacts: 'build/game.exe', fingerprint: true
+                archiveArtifacts artifacts: OUTPUT_PATH, fingerprint: true
             }
         }
     }
