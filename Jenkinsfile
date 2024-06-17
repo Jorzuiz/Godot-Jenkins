@@ -38,13 +38,7 @@ pipeline {
                         echo "Checking if Godot executable exists at: $godot_executable"
                         if [ -f "$godot_executable" ]; then
                             echo "Godot executable found. Starting build..."
-                            "$godot_executable" --path "$project_path" --export "$export_preset" "$output_path"
-                            if [ $? -ne 0 ]; then
-                                echo "Build failed with exit code $?"
-                                exit 1
-                            else
-                                echo "Build succeeded."
-                            fi
+                            "$godot_executable"--headless --path "$project_path" --export "$export_preset" "$output_path"
                         else
                             echo "Godot executable not found: $godot_executable"
                             echo "Listing contents of directory:"
