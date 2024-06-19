@@ -22,37 +22,31 @@ pipeline {
         stage('Tests') {
             steps {
                 echo "Testing the project..."
-                // Add steps to run your tests, if any
+                   
+                    // Make the shell script executable
+                    sh 'chmod +x run_tests.sh'
+                    // Execute the shell script
+                    sh './run_tests.sh'
             }
         }
         stage('Build') {
             steps {
                 echo "Building project..."
                 script {
-                    def godot_executable = GODOT_EXECUTABLE
-                    def export_preset = EXPORT_PRESET
-                    def output_path = OUTPUT_PATH
-                    def project_path = PROJECT_PATH + "\\" + PROJECT_NAME
-
-                    sh """
-                        echo "Checking if Godot executable exists at: $godot_executable"
-                        if [ -f "$godot_executable" ]; then
-                            echo "Godot executable found. Starting build..."
-                            "$godot_executable"--headless --path "$project_path" --export "$export_preset" "$output_path"
-                        else
-                            echo "Godot executable not found: $godot_executable"
-                            echo "Listing contents of directory:"
-                            ls -l "$(dirname "$godot_executable")"
-                            exit 1
-                        fi
-                    """
+                    
+                    // Make the shell script executable
+                    sh 'chmod +x build.sh'
+                    // Execute the shell script
+                    sh './build.sh'
                 }
             }
         }
         stage('Archive') {
             steps {
+                echo "Archiving test artifacts..."
+                archiveArtifacts artifacts: 'tests/test_results.txt', allowEmptyArchive: true
                 echo "Archiving build artifacts..."
-                archiveArtifacts artifacts: OUTPUT_PATH, fingerprint: true
+                archiveArtifacts artifacts: "${OUTPUT_PATH}", fingerprint: true
             }
         }
     }
