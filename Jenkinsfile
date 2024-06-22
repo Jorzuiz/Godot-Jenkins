@@ -3,14 +3,18 @@
 // Programs and files that you need in the server computer:
 // - Git bash: We need the sh.exe, usually located at C:\Program Files\Git\bin
 // - Godot Engine: Whatever version you are using on your project 
+// - shells on the script folder, it could be on the repository 
+//      but due to the variables of where is godot in your machine 
+//      we recommend to be locally on the computer server
 
-// TODO enumerate the jenkins plugins
+// TODO enumerate the jenkins plugins, how to configure ...
 //
 pipeline {
     agent any
 
     environment {
         
+        SHEXE_PATH= "path\\to\\git\\bin\\sh.exe"        
         SCRIPTS_PATH= "path\\to\\scripts"
         GODOT_VERSION = '4.2.2' // Change this version as needed
         GODOT_EXECUTABLE = "path\\to\\Godot_v${GODOT_VERSION}-stable_win64.exe" // Change the path to your Godot executable
@@ -34,25 +38,27 @@ pipeline {
         stage('Tests') {
             steps {
                 echo "Testing the project..."
-        .           cd SCRIPTS_ROUTE
-                    // Make the shell script executable
-                    sh 'chmod +x run_tests.sh'
-                    // Execute the shell script
-                    sh './run_tests.sh'
-                    cd PROJECT_PATH
+        .           dir(SCRIPTS_PATH) {
+                    script {
+                        // Make the shell script executable
+                        bat "${SHEXE_PATH} -c 'chmod +x run_tests.sh'"
+                        // Execute the shell script
+                        bat "${SHEXE_PATH} -c './run_tests.sh'"
+                    }
             }
         }
         stage('Build') {
             steps {
 
                 echo "Building project..."
-                    cd SCRIPTS_ROUTE
-
-                     // Make the shell script executable
-                    sh 'chmod +x build.sh'
-                    // Execute the shell script
-                    sh './build.sh'
-                         cd PROJECT_PATH
+                dir(SCRIPTS_PATH) {
+                    script {
+                        // Make the shell script executable
+                        bat "${SHEXE_PATH} -c 'chmod +x build.sh'"
+                        // Execute the shell script
+                        bat "${SHEXE_PATH} -c './build.sh'"
+                    }
+                }
             }
         }
         stage('Archive') {
