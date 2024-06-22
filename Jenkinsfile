@@ -1,8 +1,16 @@
+//This script is meant to be used in a Windows server 
+
+// Programs and files that you need in the server computer:
+// - Git bash: We need the sh.exe, usually located at C:\Program Files\Git\bin
+// - Godot Engine: Whatever version you are using on your project 
+
+// TODO enumerate the jenkins plugins
+//
 pipeline {
     agent any
 
     environment {
-      
+        
         SCRIPTS_PATH= "path\\to\\scripts"
         GODOT_VERSION = '4.2.2' // Change this version as needed
         GODOT_EXECUTABLE = "path\\to\\Godot_v${GODOT_VERSION}-stable_win64.exe" // Change the path to your Godot executable
