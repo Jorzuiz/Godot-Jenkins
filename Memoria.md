@@ -10,16 +10,66 @@ Esto puede requerir poco tiempo, pero a medida que el proyecto creca una build d
 
 La automatizacion de estos procesos en ordenadores dedicados elimina no solo este tiempo de buildeo (traducir luego) sino que elimina la necesidad de realizarlas manualmente salvando tiempo a la larga.
 
+## Integración continua
 
-## Estado del arte(?)
 
-## Godot Engine
+# Godot Engine
 
 Godot corre desde un ejecutable autoconetniado. No hace falta instalarlo. Existe una version normal en exe y una version sin GUI para poder usarse desde consola de comandos (headless).
 
 Se requiere descargar y configurar unas export templates de manera manual. Son los archvios que se usan para crear los ejecutables del juego, exe en windows o apk en android por ejemplo. Estas export tempaltes se descargan en la carpeta appdata, se requiere al menos usar una vez el editor con GUI para ello. Esto quiere decir que la maquina que corra Jenkins tiene que tener instaladas estas templates, las cuales incluyen JDk y SDK de antroid para la build de android.
 
-## Jenkins
+## Instalación
+
+Godot no requiere de isntalación en el sistema pues corre desde un ejecutable autocontenido. No obstante, debemos colocarlo en una carpeta y usar esa ruta para los lanzamientos de los scripts de building.
+
+## Configuración
+
+Inicialmente Godot tenia la capacidad de lanzar un proyecto con las configuraciones básicas del editor. Esto está bien para pequeños proyectos o para juegos a nivel de hobbie, pero cuando queremos hacer un juego anivel profesional queremos evitar que la gente pueda navegar lñibremente por todo nuestro proyecto.
+Al crecer en tamaño y empezar a ser usado por estudios más grandes y por no programadores Godot comenzó a emplear un sistema para crear builds que compilan todo el proyecto en un ejecutable y que permite usar archivos extra para los assets y los posibles DLCs que desarrollemos para nuestro juego.
+
+>Primero deberemos configurar en el proyecto las plataformas para las que queremos construir los ejecutables.
+
+![alt text](.\AssetsMemoria\proyectExport.png)
+
+>Simplemente con presionar en añadir y elegir la plataforma la añadiremos al proyecto.
+
+![alt text](.\AssetsMemoria\platformExport.png)
+
+>En Windows tenemos un warning inicial, podemos quitarlo desactivando la opcion modificar recursos.
+
+![alt text](.\AssetsMemoria\warningExport.png)
+
+Para poder crear las builds Godot usa plantillas con la configuración de cada plataforma. Antes de poder realizar una build deberemos descargar estas plantillas.
+
+![alt text](.\AssetsMemoria\editorTemplates.png)
+![alt text](.\AssetsMemoria\downloadTemplates.png)
+
+### Adicional
+Podemos crear configuraciones duplicadas de plataformas para generar diferentes versiones de nuestro proyecto que usen de manera selectiva partes de el, diferentes escenas, recursos, etc
+
+![alt text](.\AssetsMemoria\extraTemplates.png)
+
+Esto es útil para crear diferentes versiones del juego según nuestras necesidades sin tener que crear diferentes proyectos: demos, ramas de experimentación, versiones con telemetría para QA, paquetes con DLC, etc..
+
+***
+
+# Lanzamiento de la build
+
+Para su uso con Jenkis Godot no requiere de ninguna configuración específica, se puede lanzar desde la versión del ejecutable por CLI usando parámetros.
+
+- `--headless` permite correr el ejecutable sin lanzar una ventana. Importante para ahorrar recursos al realizar la construcción de las builds ya que al ser un proceso automático no necesitaremos la ventana.
+
+- `--export-release "Plataforma" "Ruta"` configura la build para crear el ejecutable de la plataforma en modo release. Para ello requiere de una configuracion previa en la plataforma desde el editor. Podemos añadir configuraciones extra y comprobar el nombre de las existentes en el menú `Proyecto>Exportar`, o en el archivo `export_configurations.cfg`.
+Godot permite la construcción para plataformas de ordenador de base `linux` `Windows` y `MacOS`. Para configurar una build en `android` necesitaremos coinfigurar la sdk de android manualmente.
+Las configuraciones disponibles se almacenan en un archivo llamado `export_configurations.cfg` en la ruta del proyecto.
+
+- `-verbose` Imprime por pantalla información adicional durante la construcción de la build.
+
+- `--path "Ruta"` podemos indicar de manera especifica la carpeta que contiene el proyecto a correr en el ejecutable. Si lanzamos godot en la carpeta que contienen los archivos `project.godot` y `export_configurations.cfg` no hará falta usar este parámetro.
+
+
+# Jenkins
 
 Jenkins es un porgrama de código abierto que automatiza tareas. Tiene miles de plugins mantenidos por la comunidad. En este caso vamos a instalarlo en una maquina y mediante los plugins de Github y de Godot estará atento a cambios en un repositorio y hará builds para comprobar que el proyecto funciona.
 

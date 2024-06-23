@@ -1,8 +1,8 @@
 @echo off
 setlocal
 :: Define th    e paths to the Godot executable, the project template, and the export path
-set godotExecutablePath=C:\Users\ampxr\Documents\Godot_v4.2.2-stable_win64.exe
-set projectTemplatePath=.
+set godotExecutablePath=C:\Program Files\Godot\Godot_v4.2.2-stable_win64.exe
+set projectTemplatePath=.\FirstPersonShooterTemplate
 set exportMode ="Windows"
 set outputDirectory=.\build\
 set executableName=build.exe
@@ -22,8 +22,8 @@ if exist "%outputDirectory%" (
 :: Function to execute the Godot engine with the specified project and export options
 :executeGodotProject
 if exist "%godotExecutablePath%" (
-    echo "%godotExecutablePath%" --path "%projectTemplatePath%" --export-release "Windows Desktop" "%outputPath%"
-    start "" /B "%godotExecutablePath%" --headless --verbose --export-release "Windows Desktop" "%outputPath%"
+    echo "Starting project  %projectTemplatePath% , building at %outputPath%..."
+    start "" /B "%godotExecutablePath%" --headless --verbose --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
 ) else (
     echo Godot executable not found at: %godotExecutablePath%
     dir %godotExecutablePath%
