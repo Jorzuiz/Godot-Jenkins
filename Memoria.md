@@ -68,6 +68,36 @@ Las configuraciones disponibles se almacenan en un archivo llamado `export_confi
 
 - `--path "Ruta"` podemos indicar de manera especifica la carpeta que contiene el proyecto a correr en el ejecutable. Si lanzamos godot en la carpeta que contienen los archivos `project.godot` y `export_configurations.cfg` no hará falta usar este parámetro.
 
+# Plantilla
+
+Para demostrar la impementación del sistema de Integración Continua se ha elegido una plantilla base de Godot, [First Person Shooter Template](https://godotengine.org/asset-library/asset/2652).
+Al configurar el proyecto con GitHub se ofrece la opción de usar un .gitignore para Godot, debemos evitar usar este archivo, pues posterior a las versiones 4.1 en adelante diferentes configuraciones han cambiado y [archivos vitales](https://docs.godotengine.org/en/stable/tutorials/best_practices/version_control_systems.html#files-to-exclude-from-vcs) para la configuracion de la build podrían ignorarse.
+
+La estructuración queda de la siguiente manera:
+
+![alt text](.\AssetsMemoria\directorioProyecto.png)
+
+- `.godot` son los archivos temporales del proyecto, se construyen cada vez queiniciamos el programa, tanto en el editor como en el lanzamiento de la build por CLI.
+
+- `build` es la carpeta con la salida de nuestro proyecto. COntendrá siempre un ejecutable y opcionalmente archivos pck que contienen escenas, codigo o assets extra.
+
+- `Example World` contiene la información de el nivel. Modelos 3D en formato .glb o.fbx, texturas en formatos .png y .svg y sus confgiguraciones en formato .import. Tambien contiene formatos propios del motor como los .tscn que organican las escenas en forma arborescente o los .tres que contienen informacion de las texturas.
+
+- `Player_controller` contiene la información sobre los controles del jugador. Contiene imágenes y texturas y varios scripts en el formato de Godot, .gd
+
+- `export_presets.cfg` contiene información sobre las diferentes configuraciones de las plataformas para las que queremos construir nuestro proyecto. Se pueden crear un configurar desde el editor. Algunas de estas configuraciones requieren de uso de sdk externas y requieren configuraciones no triviales para el proyecto.
+
+- `project.godot` configuracion del proyecto de Godot. Godot interpreta este archivo como la existencia de un proyecto. COntiene la información básica, nombre, icono, escena principaly algunas configuraciones específicas.
+
+Como podemos ver, los proyectos de Godot son extremadamente ligeros en comparacion con otros motores comerciales y sumamente sencillos en su organización. Godot suele recomendar la organización de nuestro juego en carpetas con toda la información que se use para cada escena, lo cual es el caso de este proyecto.
+
+En nuestro caso específico, al realizarse tan solo un proyecto de ejemplo incluiremos archivos con assets como modelos o imágenes en el repositorio, pero para proyectos más grandes puede llegar a ser vital seprarlos de los scripts y los archivos de escena.
+
+Así mismo cada asset contiene archivos .import con la informacion de importacion de estos assets. Algunos foros recomiendan no subir esta información mientras que otros hacen hincapié en hacerlo, se ha decidido hacerlo.
+
+***
+# revisar
+***
 
 # Jenkins
 
@@ -78,6 +108,17 @@ Jenkins se instala como servicio en un PC y corre en la direccion localhost:8080
 Dentro de Jenkins podemos correr las tareas como pipelines o para empezar como freestyle.
 Definimos las variables globales para los ejecutables, bash, godot, etc.
 Creamos un job, configuramos el repo con las credenciales (Plugin instalado ya) y añadinmos build steps como scripts.
+
+## Instalación
+
+Jenkins se isntala desde un ejecutable. Requiere previamente de una versión de java compatible. esta información podemos sacarla de la página oficial.
+Cuando se isntala corre en el purto 8080 por defecto.
+Una vez instalado, se ejecuta como un servicio de fondo en nuestra máquina que según los parámetros realizará las diferentes tareas que le programemeos.
+jenkis puede extender su funcionalidad enormemente con cientos de plugisn creados y mantenidos por la comunidad, en este proyecto se usarán los que Jenkins indica comor ecomendados en la instalación además de los necesarios para Github.
+
+## Configuración
+
+## Jenkinsfile
 
 
 ## Glosario
