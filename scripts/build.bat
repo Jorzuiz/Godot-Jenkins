@@ -10,14 +10,13 @@ set executableName=build.exe
 :: Construct the full output path using the directory and executable name variables
 set outputPath=%outputDirectory%%executableName%
 
-:: Check if the build directory exists, clean it, and then create it
-if exist "%outputDirectory%" (
-    echo "Cleaning las build..."
-    rmdir /s /q "%outputDirectory%"
-) else (
-    echo "Creating build directory..."
-    mkdir "%outputDirectory%"
-)
+:: Clean the last build in case it
+
+echo "Cleaning las build..."
+rmdir /s /q "%outputDirectory%"
+echo "Creating build directory..."
+mkdir "%outputDirectory%"
+
 
 :: Function to execute the Godot engine with the specified project and export options
 :executeGodotProject
@@ -25,6 +24,7 @@ if exist "%godotExecutablePath%" (
     dir .
     echo "Starting project  %projectTemplatePath% , building at %outputPath%..."
     start "" /B "%godotExecutablePath%" --headless --verbose --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
+    dir %projectTemplatePath%%outputDirectory%
 ) else (
     echo Godot executable not found at: %godotExecutablePath%
     dir %godotExecutablePath%
