@@ -22,6 +22,7 @@ if exist "%outputDirectory%" (
 :: Function to execute the Godot engine with the specified project and export options
 :executeGodotProject
 if exist "%godotExecutablePath%" (
+    dir .
     echo "Starting project  %projectTemplatePath% , building at %outputPath%..."
     start "" /B "%godotExecutablePath%" --headless --verbose --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
 ) else (
