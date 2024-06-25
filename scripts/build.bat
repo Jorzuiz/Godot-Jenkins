@@ -12,9 +12,9 @@ set outputPath=%outputDirectory%%executableName%
 
 :: Clean the last build in case it
 
-echo "Cleaning las build..."
+echo "Cleaning previous build..."
 rmdir /s /q " %projectTemplatePath%%outputDirectory%"
-echo "Creating build directory..."
+echo "Creating current build directory..."
 mkdir " %projectTemplatePath%%outputDirectory%"
 
 
@@ -22,8 +22,11 @@ mkdir " %projectTemplatePath%%outputDirectory%"
 :executeGodotProject
 if exist "%godotExecutablePath%" (
     echo "Starting project  %projectTemplatePath% , building at %outputPath%..."
+    
     start "" /B "%godotExecutablePath%" --headless --verbose --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
-    dir %projectTemplatePath%%outputDirectory%
+    
+    :: Then logs the executable route just in case of failing see if the executable generates in the route
+    dir %projectTemplatePath%%outputDirectory% 
 ) else (
     echo Godot executable not found at: %godotExecutablePath%
     dir %godotExecutablePath%
