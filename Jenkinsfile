@@ -9,22 +9,11 @@ pipeline {
     agent any
 
     environment {
-        
-       
         PROJECT_NAME="FirstPersonShooterTemplate"
         PROJECT_PATH = "${WORKSPACE}" // Use Jenkins workspace path
-        
-        REPOSITORY= 'https://github.com/Jorzuiz/Godot-Jenkins.git'
-
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo "Checkout of the repository..."
-                git url: REPOSITORY, branch: 'main'
-            }
-        }
         stage('Tests') {
             steps {
                 echo "Testing the project..."
@@ -37,11 +26,10 @@ pipeline {
             steps {
 
                 echo "Building project..."
-                dir("${WORKSPACE}") {
                     script {
                         bat "${WORKSPACE}\\scripts\\build.bat"
                     }
-                }
+                
             }
         }
     }
@@ -49,8 +37,6 @@ pipeline {
         always{
             echo "Archiving test artifacts..."
     
-            
-            
             echo "Archiving build artifacts..."
             archive "${PROJECT_NAME}\\build\\**"
             
