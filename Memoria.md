@@ -3,29 +3,40 @@
 ## Motivación
 
 En el desarrollo de software es fundamental la comprobación frecuente del código, tanto la depuración como el testeo.
-Los videojuegos concretamente son sofware con reputacion por su alto nivel de complejidad.
+Los videojuegos en especial son sofware con tendencia a estos errores por su alto nivel de complejidad en los numerosos sistemas que lo componen.
 Cuando una persona desarrolla un juego le puede ser fácil hacer una build y comprobar su funcionamiento, pero cuando un juego escala y aumenta el tamaño del estudio aparecen problemas a la hora de "sincronizar" el trabajo de múltiples personas y comprobar su funcionamiento.
 Una manera de comprobar este funcionamiento es crear estas builds cada cierto tiempo para que el código de las personas involucradas se mantenga sano.
 Esto puede requerir poco tiempo, pero a medida que el proyecto creca una build de 30 segundos puede llegar a ser de 1 hora y dejar el ordenador (u ordenadores) que lo corren inservibles.
 
-La automatizacion de estos procesos en ordenadores dedicados elimina no solo este tiempo de buildeo (traducir luego) sino que elimina la necesidad de realizarlas manualmente salvando tiempo a la larga.
+La Integración Continua (CI por su siglas en inglés) es ensencial por los siguientes motivos:
+
+- Detección temprana de errores: Al integrar los cambios con frecuencia, los errores se pueden ver casi tan pronto como surgen.
+
+- Trabajo en equipo más eficiente: al realizarse las construcciones y pruebas del proyecto de manera automática, los diferentes equipos pueden centrarse en el desarrollo sin interferir entre ellos y sin tener que preocuparse de la integración entre ellos.
+
+- Reducción de costes: Al detectarse y solucionar problemas tan pronto como surgen, se ahorra la solución de problemas en etapas posteriores al desarrollo.
+
+- Mejora de la calidad del proyecto: Cada cambio está sujeto a pruebas automáticas y construcciones de proyecto, asegurando una calidad de código antes de aprobarse.
+
+La automatizacion de estos procesos en ordenadores dedicados elimina no solo este tiempo de buildeo (traducir luego) y de comprobación del código con pruebas, sino que elimina la necesidad de realizarlas manualmente salvando tiempo a la larga.
 
 ## Integración continua
 
-
 # Godot Engine
 
-Godot corre desde un ejecutable autoconetniado. No hace falta instalarlo. Existe una version normal en exe y una version sin GUI para poder usarse desde consola de comandos (headless).
+[Godot Engine](https://godotengine.org/) es un motor de videojuegos 2D y 3D multiplataforma, libre y de código abierto, publicado bajo la Licencia MIT, eso quiere decir, que podemos desarrollar juegos en él con fines comerciales sin necesidad de comprar una licencia.
 
-Se requiere descargar y configurar unas export templates de manera manual. Son los archvios que se usan para crear los ejecutables del juego, exe en windows o apk en android por ejemplo. Estas export tempaltes se descargan en la carpeta appdata, se requiere al menos usar una vez el editor con GUI para ello. Esto quiere decir que la maquina que corra Jenkins tiene que tener instaladas estas templates, las cuales incluyen JDk y SDK de antroid para la build de android.
+Corre desde un ejecutable autocontenido. No hace falta instalarlo. Existe una version normal en exe y una version sin GUI para poder usarse desde consola de comandos.
+
+Para crear build en diferentes plataformas requiere de descargar y configurar unas export templates de manera manual. Estas templates son específicas a la plataformas, exe en windows o apk en android por ejemplo. Estas export tempaltes se descargan en la carpeta appdata, se puede descargar desde el Editor o desde la [página de Godot](https://github.com/godotengine/godot-builds/releases/download/4.2-stable/Godot_v4.2-stable_export_templates.tpz). Esto quiere decir que la maquina que corra Jenkins tiene que tener instaladas estas templates, y en caso de otras plataformas, tambien requiere de la instalacion y configuracion de SDKs.
 
 ## Instalación
 
-Godot no requiere de isntalación en el sistema pues corre desde un ejecutable autocontenido. No obstante, debemos colocarlo en una carpeta y usar esa ruta para los lanzamientos de los scripts de building.
+Godot no requiere de isntalación en el sistema pues corre desde un ejecutable autocontenido. No obstante, debemos colocarlo en una carpeta fácil de localizar, o contigurar una variable PATH y usar esa ruta para los lanzamientos de los scripts de building.
 
 ## Configuración
 
-Inicialmente Godot tenia la capacidad de lanzar un proyecto con las configuraciones básicas del editor. Esto está bien para pequeños proyectos o para juegos a nivel de hobbie, pero cuando queremos hacer un juego anivel profesional queremos evitar que la gente pueda navegar lñibremente por todo nuestro proyecto.
+Godot tiene la capacidad de lanzar un proyecto con las configuraciones básicas del editor y el ejecutable. Esto está bien para pequeños proyectos o para juegos a nivel de hobbie, pero cuando queremos hacer un juego a nivel profesional queremos evitar que la gente pueda navegar lñibremente por todo nuestro proyecto.
 Al crecer en tamaño y empezar a ser usado por estudios más grandes y por no programadores Godot comenzó a emplear un sistema para crear builds que compilan todo el proyecto en un ejecutable y que permite usar archivos extra para los assets y los posibles DLCs que desarrollemos para nuestro juego.
 
 >Primero deberemos configurar en el proyecto las plataformas para las que queremos construir los ejecutables.
