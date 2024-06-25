@@ -15,7 +15,7 @@ set outputPath=%outputDirectory%%executableName%
 echo "Cleaning previous build..."
 rmdir /s /q " %projectTemplatePath%%outputDirectory%"
 echo "Creating current build directory..."
-mkdir " %projectTemplatePath%%outputDirectory%"
+mkdir "%projectTemplatePath%%outputDirectory%"
 
 
 :: Function to execute the Godot engine with the specified project and export options
