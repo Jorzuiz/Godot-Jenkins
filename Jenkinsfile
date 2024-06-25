@@ -46,7 +46,7 @@ pipeline {
             archive "${WORKSPACE}\\test_results.txt"
     
             echo "Archiving build artifacts..."
-            archive "${PROJECT_NAME}\\build\\**"
+            archiveArtifacts artifacts:"${PROJECT_NAME}\\build\\**", fingerprint: true
             
             
         }
