@@ -23,7 +23,6 @@ pipeline {
                 echo "Testing the project..."
                 bat "${WORKSPACE}\\scripts\\run_tests.bat"  
                  
-                
             }
         }
 
@@ -44,7 +43,7 @@ pipeline {
     post{
         always{
             echo "Archiving test artifacts..."
-            archive "${PROJECT_NAME}\\test_results\\**"
+            archive "${WORKSPACE}\\test_results.txt"
     
             echo "Archiving build artifacts..."
             archive "${PROJECT_NAME}\\build\\**"
