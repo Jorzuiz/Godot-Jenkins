@@ -388,3 +388,6 @@ $RECYCLE.BIN/
 Godot_v4.2.2-stable_win64.exe
 *.zip
 Godot_v4.2.2-stable_win64_console.exe
+# Ignore your own artifacts 
+FirstPersonShooterTemplate/build/build.pck
+FirstPersonShooterTemplate/build/build.exe
