@@ -17,14 +17,6 @@ pipeline {
 
     stages {
 
-        //First we run the tests
-        stage('Tests') {
-            steps {
-                echo "Testing the project..."
-                bat "${WORKSPACE}\\scripts\\run_tests.bat"  
-                 
-            }
-        }
 
         //Then generate the exe 
         stage('Build') {
@@ -37,6 +29,16 @@ pipeline {
                 
             }
         }
+
+        //First we run the tests
+        stage('Tests') {
+            steps {
+                echo "${WORKSPACE} Testing the project..."
+                bat "${WORKSPACE}\\scripts\\run_tests.bat"  
+                 
+            }
+        }
+
     }
 
     //And lastly we upload that generated files to the jenkins server

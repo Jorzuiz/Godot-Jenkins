@@ -13,7 +13,7 @@ set outputPath=%outputDirectory%%executableName%
 :: Clean the last build in case it
 
 echo "Cleaning previous build..."
-rmdir /s /q " %projectTemplatePath%%outputDirectory%"
+rmdir /s /q "%projectTemplatePath%%outputDirectory%"
 echo "Creating current build directory..."
 mkdir "%projectTemplatePath%%outputDirectory%"
 
@@ -23,7 +23,7 @@ mkdir "%projectTemplatePath%%outputDirectory%"
 if exist "%godotExecutablePath%" (
     echo "Starting project  %projectTemplatePath% , building at %outputPath%..."
     
-    start "" /B "%godotExecutablePath%" --headless --verbose --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
+    "%godotExecutablePath%" --headless --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
     
     :: Then logs the executable route just in case of failing see if the executable generates in the route
     dir %projectTemplatePath%%outputDirectory% 

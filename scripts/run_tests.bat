@@ -9,7 +9,7 @@ set outputDirectory=.\test_results\
 :executeGodotProject
 if exist "%godotExecutablePath%" (
     echo "Starting project  %projectTemplatePath% , testing ..."
-    start "" /B "%godotExecutablePath%" --headless --verbose --path "$project_path" --run-tests > "./test_results.txt"" 
+    "%godotExecutablePath%" --headless --verbose --path "$project_path" --run-tests > "./test_results.txt"" 
  
 ) else (
     echo Godot executable not found at: %godotExecutablePath%
