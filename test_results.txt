@@ -1,1 +1,9 @@
-Invalid project path specified: "$project_path", aborting.
+Godot Engine v4.2.2.stable.official.15073afe3 - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+ 
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 2995524600
+EDITOR API HASH: 3767149329
+Loaded system CA certificates

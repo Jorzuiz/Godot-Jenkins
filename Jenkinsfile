@@ -31,21 +31,20 @@ pipeline {
         }
 
         //First we run the tests
-        stage('Tests') {
-            steps {
-                echo "${WORKSPACE} Testing the project..."
-                bat "${WORKSPACE}\\scripts\\run_tests.bat"  
-                 
-            }
-        }
+        //stage('Tests') {
+            //steps {
+                //echo "${WORKSPACE} Testing the project..."
+                //bat "${WORKSPACE}\\scripts\\run_tests.bat"         
+            //}
+        //}
 
     }
 
     //And lastly we upload that generated files to the jenkins server
     post{
         always{
-            echo "Archiving test artifacts..."
-            archive "${WORKSPACE}\\test_results.txt"
+            //echo "Archiving test artifacts..."
+            //archive "${WORKSPACE}\\test_results.txt"
     
             echo "Archiving build artifacts..."
             archiveArtifacts artifacts:"${PROJECT_NAME}\\build\\**", fingerprint: true

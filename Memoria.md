@@ -82,14 +82,53 @@ Las configuraciones disponibles se almacenan en un archivo llamado `export_confi
 
 # Jenkins
 
-Jenkins es un porgrama de código abierto que automatiza tareas. Tiene miles de plugins mantenidos por la comunidad. En este caso vamos a instalarlo en una maquina y mediante los plugins de Github y de Godot estará atento a cambios en un repositorio y hará builds para comprobar que el proyecto funciona.
+Jenkins es un servidor de automatización de código abierto basado en java usado para sistemas de integración continua. Tiene una funcinalidad básica y ex ampliabe mediante una base de cientos de plugins desarrollados y mantenidos por la comunidad. Es compatible con sistemas de control de versiones como Git o Perforce y permite lanzamiento de scripts en consola.
 
+En este proyecto se instalará en una maquina y mediante los plugins de Github y de Godot estará atento a cambios en un repositorio y hará builds y test para comprobar que el proyecto funciona.
+
+## Instalación
+
+Primero debemos asegurarnos de tener instalada una [version de Java compatible](https://www.jenkins.io/doc/book/platform-information/support-policy-java/) 
+Podemos descargar Jenkins desde la [página oficial](https://www.jenkins.io/download/)
 Jenkins se instala como servicio en un PC y corre en la direccion localhost:8080 por defecto. Para configurarlo tendremos que usar un user admin y decargar dentro los plugins.
 
-Dentro de Jenkins podemos correr las tareas como pipelines o para empezar como freestyle.
-Definimos las variables globales para los ejecutables, bash, godot, etc.
-Creamos un job, configuramos el repo con las credenciales (Plugin instalado ya) y añadinmos build steps como scripts.
+Antes de instalar Jenkins tenemos que asegurarnos de tener instalada una version de Java compatible
 
+Esta imagen está aqui temporalmente
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+Una vez instalado jenkins correrá como servicio cada vez que la máquina se encienda y realizará sus procesos según la configuración
+
+![alt text](.\AssetsMemoria\jenkinsProcess.png)
+
+Para continuar con la instalación, debemos de terminar la configuración inicial
+
+![alt text](.\AssetsMemoria\jenkinsPassword.png)
+
+Nos preguntará si queremos instalar plugins, seleccionamos los recomendados.
+
+![alt text](.\AssetsMemoria\plugins1.png)![alt text](.\AssetsMemoria\plugins2.png)
+
+Finalmente tendremos el panel de control de Jenkins
+
+![alt text](.\AssetsMemoria\controlPanel.png)
+
+## Configuración
+
+Dentro de Jenkins podemos correr las tareas como pipelines.
+
+![alt text](.\AssetsMemoria\pipeline.png)
+
+Seleccionamos en Pipeline la opción de que se ejecute según el script del repositorio, introducimos la URL y cambiamos la rama a main (Por defecto se selecciona como master, Github realizó un cambio hace tiempo en la nomenclatura que hace este valor por defecto inválido)
+
+![alt text](.\AssetsMemoria\pipelineConfig.png)
+
+Seleccionamos la opción de construir ahora y cuando se ejecute podermos descargar los archivos de la build a través de Jenkins
+
+![alt text](.\AssetsMemoria\pipelineResult.png)
 
 ## Glosario
 
@@ -97,9 +136,8 @@ Creamos un job, configuramos el repo con las credenciales (Plugin instalado ya) 
 
 ## Implementación
 
-Jenkins corre como un servicio de fondo en una máquina. Usa y requiere de java instalado (En este caso la version 21).
-por defecto corre en localhols:8080 y se accede a la app a traves de un navegador
-Se genera una contraseña de admin cuando se instala
+Jenkins corre como un servicio de fondo en una máquina. Por defecto la aplicación corre en localhost:8080 y se accede a la app a traves de un navegador usando esa dirección.
+Se genera una contraseña de admin cuando se instala.
 
 > Buildear en imagenes (Docker) evita riesgos de seguridad sobre el servidor.
 Estos contenedores pueden correr en diferentes máquinas y conectarse mediante una clave SSH.
@@ -108,27 +146,60 @@ Hay un bug actualmente que no deja correr contenedores linux desde windows. [Err
 Hay problemas para correr la imagen en docker pipeline porque tenemos que sacarla de algun lado.
 Abandono Docker para esto, va a correr todo desde la maquina destino
 
-Seteamos una variable global EN JENKINS con la ruta del exe.
+Seteamos una constante de entorno global en el jenkinsfile con el nombre del proyecto.
 
 El archivo cfg que se usa para generar el exe/apk contiene ciertas credenciales asique se suele añadir al gitignore, hay que encontrar una manera de configurarlas desde consola I guess.
-Por lo visto esto se solucionó en un [Pull Request](https://github.com/godotengine/godot/pull/76165) PERO no está actualizado el gitignore asique se ha usado uno diferente.
+Por lo visto esto se solucionó en un [Pull Request](https://github.com/godotengine/godot/pull/76165) PERO no está actualizado el gitignore asique se ha usado uno diferente con ese ligero cambio.
 
-
-Jenkins ser puede acceder desde fuera con la "app" en navegador. Hay que configurar los puertos del server primero. en este caso se ha creado 8080 por defecto y para acceder desde otro ordenador usamos <iplocal:8080>
+Jenkins se puede acceder desde fuera con la "app" en navegador. Hay que configurar los puertos del server primero. en este caso se ha creado 8080 por defecto y para acceder desde otro ordenador usamos <iplocal:8080>
 tenemos que crear en el server un usuario nuevo para poder entrar.
 Una vez dentro tenemos acceso a las pipelines, podemos crear cosas.
 
-La pipeline está configurada de la siguiente manera
-$$\boxed{Deteccion de algo}\rightarrow\boxed{Checkout del código}\rightarrow\boxed{Ejecucion del script de build}$$
+Primero de todo, empezaremos por el archivo Jenkinsfile, el cual contiene el flujo de trabajo del job en sí. Nuestro job tiene 3 fases:
+1. Corre el archivo run_tests.bat el cual corre los tests unitarios del proyecto
+2. Corre el archivo build.bat el cual genera el .exe y el .pck 
+3. Sube al jenkins los archivos de build para que nuestro tester pueda bajarse la ultima build disponible.
+
+
+En cuanto, a la configuracion del job de jenkins se ha de seguir los siguientes pasos:
+1. Crear un trabajo de tipo Pipeline
+2. Después en la configuracion vamos a poner nuestro repositorio, el cual tendrá que tener los scripts y el jenkinsfile
+![alt text](.\AssetsMemoria\JobPipeline.png)
+
+Hasta aquí tendríamos la funcionalidad básica para que manualmente (dando a correr el job), tendríamos la build en jenkins, sin embargo hemos decidido automatizarlo de forma que periodicamente se haga este job.
+
+3. Para ello, en la ventana de build triggers meteremos lo que hay en esta imagen, el periodo de tiempo se puede configurar a necesidad del equipo
+![alt text](.\AssetsMemoria\build-triggers.png)
+
+Y ahora tendríamos el job de forma periodica y automatizada.
+![alt text](.\AssetsMemoria\builds.png)
+
+Es posible que pueda dar problemas para ello se ha tenido que cambiar la carpeta de instalación de Jenkins para correr los scripts a permisos en Windows 10, en un principio en Windows 11 no ocurre.
+Para ello se ha instalado en una carpeta con los permisos habilitados y se ha modificado el xml y las variables de entorno JENKINS_HOME.
+1. primero debemos de detener el proceso
+
+![alt text](.\AssetsMemoria\jenkinsStop.png)
+
+2. Crear una nueva variable de entorno con la carpeta de trabajo de Jenkins
+
+![alt text](.\AssetsMemoria\jenkinsENV1.png)![alt text](.\AssetsMemoria\jenkinsENV2.png)![alt text](.\AssetsMemoria\jenkinsENV3.png)
+
+3. Modificar el .xml en la carpeta de instalación con la ruta
+
+![alt text](.\AssetsMemoria\jenkinsXML.png)
+
+4. Reiniciar el proceso
+
+> Si copiamos el espacio de trabajo anterior habremos acabado, de lo contrario nos pedirá configurar la contraseña y las pipelines desde 0
 
 ## Justificacion
 
--Godot: Se ha elegido Godot porque es de código abierto, gratuito y las builds son ligeras. Hay múltiples juegos "grandes" en la industria recientemente publicados con Godot y está cogiendo fuerza.
+- Godot: Se ha elegido Godot porque es de código abierto, gratuito y las builds son ligeras. Hay múltiples juegos "grandes" en la industria recientemente publicados con Godot y está cogiendo fuerza.
 
--Jenkins: Se ha elegido Jenkins porque es una herramienta de código abierto, es de las más extendidas para automatización, lo cual hace quehaya una gran cantidad de plugins que se mantienen y actualizan continuamente y hay tutoriales de ´facil acceso.
+- Jenkins: Se ha elegido Jenkins porque es una herramienta de código abierto, es de las más extendidas para automatización, lo cual hace quehaya una gran cantidad de plugins que se mantienen y actualizan continuamente y hay tutoriales de facil acceso.
 Los 'trabajos' de automatizacion pueden configurarse tanto en la app como en un archivo jenkinsfile. ambas opciones tienen ventajas y desventajas, más seguridad o más facilidad de acceso por los usuarios, etc..
 
--Servidor Dedicado: Aunque las builds pueden correrse en la nube o incluso en contenedores de Docker se ha decidido hacer así por simplicidad
+- Servidor Dedicado: Aunque las builds pueden correrse en la nube o incluso en contenedores de Docker se ha decidido hacer así por simplicidad
 
 ## Documentacion - Referencias
 
