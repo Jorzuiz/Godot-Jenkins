@@ -23,7 +23,7 @@ mkdir "%projectTemplatePath%%outputDirectory%"
 if exist "%godotExecutablePath%" (
     echo "Starting project  %projectTemplatePath% , building at %outputPath%..."
     
-    "%godotExecutablePath%" --headless --export-release "Windows Desktop" "%outputPath%" --path "%projectTemplatePath%"
+    "%godotExecutablePath%" --headless --export-release "Windows Desktop" "%outputDirectory%%executableName%" --path "%projectTemplatePath%"
     
     :: Then logs the executable route just in case of failing see if the executable generates in the route
     dir %projectTemplatePath%%outputDirectory% 
